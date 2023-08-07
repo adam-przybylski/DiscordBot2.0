@@ -23,8 +23,10 @@
 hs_err_pid*
 replay_pid*
 
-
-# intellij
+# Intellij
 target/
 *.iml
 .idea/*
+
+# Private
+.env
