@@ -2,7 +2,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
 
-  <groupId>org.example</groupId>
+  <groupId>com.bot</groupId>
   <artifactId>Bot</artifactId>
   <version>1.0</version>
   <packaging>jar</packaging>
@@ -41,6 +41,11 @@
       <artifactId>dotenv-java</artifactId>
       <version>3.0.0</version>
     </dependency>
+    <dependency>
+      <groupId>com.fasterxml.jackson.core</groupId>
+      <artifactId>jackson-databind</artifactId>
+      <version>2.15.2</version>
+    </dependency>
   </dependencies>
 
   <build>
@@ -54,7 +59,7 @@
           </descriptorRefs>
           <archive>
             <manifest>
-              <mainClass>org.example.Bot</mainClass>
+              <mainClass>com.bot.Bot</mainClass>
             </manifest>
           </archive>
         </configuration>
