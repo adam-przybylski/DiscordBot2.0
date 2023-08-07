@@ -24,13 +24,13 @@ public class Config {
     }
 
     public Map<String, Object> getConfig() {
-        if(config == null){
+        if (config == null) {
             loadConfig();
         }
         return config;
     }
 
-    public void loadConfig(){
+    public void loadConfig() {
         File jsonFile = new File("config.json");
         try {
             config = new ObjectMapper().readValue(jsonFile, HashMap.class);
