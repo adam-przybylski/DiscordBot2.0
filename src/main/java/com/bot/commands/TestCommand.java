@@ -5,10 +5,9 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class TestCommand implements Command{
+public class TestCommand implements Command {
     @Override
     public void handle(SlashCommandInteractionEvent event) {
         event.reply("You just used test command").queue();

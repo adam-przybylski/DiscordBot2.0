@@ -8,6 +8,9 @@ import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.utils.ChunkingFilter;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
+import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 
 import javax.security.auth.login.LoginException;
@@ -41,12 +44,13 @@ public class Bot {
                 GatewayIntent.GUILD_MESSAGES,
                 GatewayIntent.GUILD_PRESENCES,
                 GatewayIntent.GUILD_VOICE_STATES,
-                GatewayIntent.MESSAGE_CONTENT
+                GatewayIntent.MESSAGE_CONTENT,
+                GatewayIntent.GUILD_WEBHOOKS
         );
         builder.enableIntents(intents);
-//        builder.setMemberCachePolicy(MemberCachePolicy.ALL);
-//        builder.setChunkingFilter(ChunkingFilter.ALL);
-//        builder.enableCache(CacheFlag.ONLINE_STATUS);
+        //builder.setMemberCachePolicy(MemberCachePolicy.ALL);
+        builder.setChunkingFilter(ChunkingFilter.ALL);
+        builder.enableCache(CacheFlag.VOICE_STATE);
 
         shardManager = builder.build();
 

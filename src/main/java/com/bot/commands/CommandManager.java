@@ -15,7 +15,8 @@ public class CommandManager extends ListenerAdapter {
 
     List<Command> commands = List.of(
             new SayCommand(),
-            new TestCommand()
+            new TestCommand(),
+            new PlayCommand()
     );
 
     @Override
