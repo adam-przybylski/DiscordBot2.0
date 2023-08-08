@@ -1,6 +1,7 @@
 package com.bot.commands;
 
 import com.bot.lavaplayer.PlayerManager;
+import com.bot.utils.Utils;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
@@ -17,26 +18,13 @@ public class PlayCommand implements Command {
     @Override
     public void handle(SlashCommandInteractionEvent event) {
         event.deferReply().queue();
-        if (!event.getMember().getVoiceState().inAudioChannel()) {
-            event.getChannel().sendMessage("You need to be in the voice channel for this command to work").queue();
-            return;
-        }
+        Utils.joinVoiceChannel(event);
 
-        if (!event.getGuild().getAudioManager().isConnected()) {
-            final AudioManager audioManager = event.getGuild().getAudioManager();
-            final VoiceChannel memberChannel = (VoiceChannel) event.getMember().getVoiceState().getChannel();
-
-            audioManager.openAudioConnection(memberChannel);
-        }
-
-        System.out.println(event.getOption("url").getAsString());
         String link = String.join(" ", event.getOption("url").getAsString());
-        System.out.println(link);        if (!isUrl(link)) {
+        if (!isUrl(link)) {
             link = "ytsearch: " + link + " audio";
         }
-        System.out.println("2");
         PlayerManager.getInstance().loadAndPlay(event.getChannel().asTextChannel(), link);
-        System.out.println("3");
         event.getHook().sendMessage("xd").queue();
     }
 
