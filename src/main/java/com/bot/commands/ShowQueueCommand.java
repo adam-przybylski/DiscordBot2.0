@@ -9,11 +9,11 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.util.List;
 
-public class ShowQueueCommand implements Command{
+public class ShowQueueCommand implements Command {
     @Override
     public void handle(SlashCommandInteractionEvent event) {
         event.deferReply().queue();
-        Object[] queue  = PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.toArray();
+        Object[] queue = PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.queue.toArray();
         StringBuilder sb = new StringBuilder();
         sb.append("Queue:\n");
         for (Object object : queue) {

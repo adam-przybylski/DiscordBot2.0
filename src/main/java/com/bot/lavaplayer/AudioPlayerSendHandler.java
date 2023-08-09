@@ -20,7 +20,6 @@ public class AudioPlayerSendHandler implements AudioSendHandler {
         this.frame.setBuffer(buffer);
     }
 
-
     @Override
     public boolean canProvide() {
         return this.audioPlayer.provide(this.frame);

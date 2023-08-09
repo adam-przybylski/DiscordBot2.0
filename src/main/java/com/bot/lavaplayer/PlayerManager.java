@@ -8,11 +8,9 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.Guild;
-import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.apache.commons.collections4.map.HashedMap;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -25,6 +23,7 @@ public class PlayerManager {
         audioPlayerManager = new DefaultAudioPlayerManager();
         musicManagers = new HashedMap<>();
         AudioSourceManagers.registerLocalSource(this.audioPlayerManager);
+        AudioSourceManagers.registerRemoteSources(this.audioPlayerManager);
     }
 
     public GuildMusicManager getMusicManager(Guild guild) {
