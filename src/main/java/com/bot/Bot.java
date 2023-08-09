@@ -49,7 +49,7 @@ public class Bot {
         );
         builder.enableIntents(intents);
         //builder.setMemberCachePolicy(MemberCachePolicy.ALL);
-        builder.setChunkingFilter(ChunkingFilter.ALL);
+        //builder.setChunkingFilter(ChunkingFilter.ALL);
         builder.enableCache(CacheFlag.VOICE_STATE);
 
         shardManager = builder.build();

@@ -20,12 +20,14 @@ public class PlayCommand implements Command {
         event.deferReply().queue();
         Utils.joinVoiceChannel(event);
 
-        String link = String.join(" ", event.getOption("url").getAsString());
+        String link = event.getOption("url").getAsString();
+        System.out.println(link);
         if (!isUrl(link)) {
             link = "ytsearch: " + link + " audio";
         }
-        PlayerManager.getInstance().loadAndPlay(event.getChannel().asTextChannel(), link);
-        event.getHook().sendMessage("xd").queue();
+        System.out.println(link);
+        PlayerManager.getInstance().loadAndPlay(event, link);
+        event.getHook().sendMessage("Adding to queue:").queue();
     }
 
     public boolean isUrl(String url) {

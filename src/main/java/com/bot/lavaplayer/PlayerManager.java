@@ -9,8 +9,10 @@ import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.entities.channel.concrete.TextChannel;
+import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.apache.commons.collections4.map.HashedMap;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -22,9 +24,7 @@ public class PlayerManager {
     public PlayerManager() {
         audioPlayerManager = new DefaultAudioPlayerManager();
         musicManagers = new HashedMap<>();
-
         AudioSourceManagers.registerLocalSource(this.audioPlayerManager);
-        AudioSourceManagers.registerRemoteSources(this.audioPlayerManager);
     }
 
     public GuildMusicManager getMusicManager(Guild guild) {
@@ -35,13 +35,14 @@ public class PlayerManager {
         });
     }
 
-    public void loadAndPlay(TextChannel textChannel, String trackURL) {
-        final GuildMusicManager musicManager = this.getMusicManager(textChannel.getGuild());
+    public void loadAndPlay(SlashCommandInteractionEvent event, String trackURL) {
+        final GuildMusicManager musicManager = this.getMusicManager(event.getGuild());
+
         this.audioPlayerManager.loadItemOrdered(musicManager, trackURL, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
                 musicManager.scheduler.queue(audioTrack);
-                String message = "Adding to queue **"
+                String message = "**"
                         .concat(audioTrack.getInfo().title)
                         .concat("** by **")
                         .concat(audioTrack.getInfo().author)
@@ -50,15 +51,16 @@ public class PlayerManager {
                         .concat(":")
                         .concat(String.valueOf(audioTrack.getInfo().length / 1000 % 60))
                         .concat(")**");
-                textChannel.sendMessage(message).queue();
+                event.getChannel().asTextChannel().sendMessage(message).queue();
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
+
                 if (!tracks.isEmpty()) {
                     musicManager.scheduler.queue(tracks.get(0));
-                    String message = "Adding to queue **"
+                    String message = "**"
                             .concat(tracks.get(0).getInfo().title)
                             .concat("** by **")
                             .concat(tracks.get(0).getInfo().author)
@@ -67,18 +69,18 @@ public class PlayerManager {
                             .concat(":")
                             .concat(String.valueOf(tracks.get(0).getInfo().length / 1000 % 60))
                             .concat(")**");
-                    textChannel.sendMessage(message).queue();
+                    event.getChannel().asTextChannel().sendMessage(message).queue();
                 }
             }
 
             @Override
             public void noMatches() {
-                textChannel.sendMessage("No matches found").queue();
+                event.getChannel().asTextChannel().sendMessage("No matches found").queue();
             }
 
             @Override
             public void loadFailed(FriendlyException e) {
-                textChannel.sendMessage("Failed to play a track").queue();
+                event.getChannel().asTextChannel().sendMessage("Failed to play a song").queue();
                 e.printStackTrace();
             }
         });
