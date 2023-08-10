@@ -21,7 +21,8 @@ public class CommandManager extends ListenerAdapter {
             new SkipAllCommand(),
             new JoinCommand(),
             new LeaveCommand(),
-            new ShowQueueCommand()
+            new ShowQueueCommand(),
+            new NowPlayingCommand()
     );
 
     @Override
