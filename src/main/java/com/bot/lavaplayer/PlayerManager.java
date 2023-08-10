@@ -36,6 +36,35 @@ public class PlayerManager {
         });
     }
 
+    public void playLocalTrack(SlashCommandInteractionEvent event, String trackURL) {
+        final GuildMusicManager musicManager = this.getMusicManager(event.getGuild());
+        this.audioPlayerManager.loadItem(trackURL, new AudioLoadResultHandler() {
+            @Override
+            public void trackLoaded(AudioTrack audioTrack) {
+                musicManager.scheduler.queue(audioTrack);
+            }
+
+            @Override
+            public void playlistLoaded(AudioPlaylist audioPlaylist) {
+            }
+
+            @Override
+            public void noMatches() {
+                if (event != null) {
+                    event.getChannel().asTextChannel().sendMessage("No matches found").queue();
+                }
+            }
+
+            @Override
+            public void loadFailed(FriendlyException e) {
+                if (event != null) {
+                    event.getChannel().asTextChannel().sendMessage("Failed to play a track").queue();
+                }
+                e.printStackTrace();
+            }
+        });
+    }
+
     public void loadAndPlay(SlashCommandInteractionEvent event, String trackURL) {
         final GuildMusicManager musicManager = this.getMusicManager(event.getGuild());
 
@@ -126,5 +155,28 @@ public class PlayerManager {
             INSTANCE = new PlayerManager();
         }
         return INSTANCE;
+    }
+
+    public void playLocalTrack(Guild guild, String trackURL) {
+        final GuildMusicManager musicManager = this.getMusicManager(guild);
+        this.audioPlayerManager.loadItem(trackURL, new AudioLoadResultHandler() {
+            @Override
+            public void trackLoaded(AudioTrack audioTrack) {
+                musicManager.scheduler.queue(audioTrack);
+            }
+
+            @Override
+            public void playlistLoaded(AudioPlaylist audioPlaylist) {
+            }
+
+            @Override
+            public void noMatches() {
+            }
+
+            @Override
+            public void loadFailed(FriendlyException e) {
+                e.printStackTrace();
+            }
+        });
     }
 }

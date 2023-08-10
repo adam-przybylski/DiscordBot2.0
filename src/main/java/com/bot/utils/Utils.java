@@ -1,6 +1,7 @@
 package com.bot.utils;
 
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import net.dv8tion.jda.api.entities.SelfUser;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -9,6 +10,8 @@ import java.net.URI;
 import java.net.URISyntaxException;
 
 public class Utils {
+
+    public static SelfUser selfUser;
 
     public static void joinVoiceChannel(SlashCommandInteractionEvent event) {
         if (!event.getMember().getVoiceState().inAudioChannel()) {

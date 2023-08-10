@@ -2,12 +2,14 @@ package com.bot;
 
 import com.bot.commands.CommandManager;
 import com.bot.listeners.EventListener;
+import com.bot.utils.Utils;
 import io.github.cdimascio.dotenv.Dotenv;
 import net.dv8tion.jda.api.OnlineStatus;
 import net.dv8tion.jda.api.entities.Activity;
 import net.dv8tion.jda.api.requests.GatewayIntent;
 import net.dv8tion.jda.api.sharding.DefaultShardManagerBuilder;
 import net.dv8tion.jda.api.sharding.ShardManager;
+import net.dv8tion.jda.api.utils.MemberCachePolicy;
 import net.dv8tion.jda.api.utils.cache.CacheFlag;
 
 import javax.security.auth.login.LoginException;
@@ -45,11 +47,12 @@ public class Bot {
                 GatewayIntent.GUILD_WEBHOOKS
         );
         builder.enableIntents(intents);
-        //builder.setMemberCachePolicy(MemberCachePolicy.ALL);
+        builder.setMemberCachePolicy(MemberCachePolicy.VOICE);
         //builder.setChunkingFilter(ChunkingFilter.ALL);
         builder.enableCache(CacheFlag.VOICE_STATE);
 
         shardManager = builder.build();
+        Utils.selfUser = shardManager.getShards().get(0).getSelfUser();
 
         // Register listener
         shardManager.addEventListener(new EventListener(), new CommandManager());

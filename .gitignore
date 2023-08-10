@@ -31,3 +31,4 @@ target/
 # Private
 .env
 config.json
+tracks/
