@@ -36,36 +36,7 @@ public class PlayerManager {
         });
     }
 
-    public void playLocalTrack(SlashCommandInteractionEvent event, String trackURL) {
-        final GuildMusicManager musicManager = this.getMusicManager(event.getGuild());
-        this.audioPlayerManager.loadItem(trackURL, new AudioLoadResultHandler() {
-            @Override
-            public void trackLoaded(AudioTrack audioTrack) {
-                musicManager.scheduler.queue(audioTrack);
-            }
-
-            @Override
-            public void playlistLoaded(AudioPlaylist audioPlaylist) {
-            }
-
-            @Override
-            public void noMatches() {
-                if (event != null) {
-                    event.getChannel().asTextChannel().sendMessage("No matches found").queue();
-                }
-            }
-
-            @Override
-            public void loadFailed(FriendlyException e) {
-                if (event != null) {
-                    event.getChannel().asTextChannel().sendMessage("Failed to play a track").queue();
-                }
-                e.printStackTrace();
-            }
-        });
-    }
-
-    public void loadAndPlay(SlashCommandInteractionEvent event, String trackURL) {
+    public void play(SlashCommandInteractionEvent event, String trackURL) {
         final GuildMusicManager musicManager = this.getMusicManager(event.getGuild());
 
         this.audioPlayerManager.loadItemOrdered(musicManager, trackURL, new AudioLoadResultHandler() {
@@ -99,7 +70,36 @@ public class PlayerManager {
         });
     }
 
-    public void loadAndPlayPlaylist(SlashCommandInteractionEvent event, String trackURL) {
+    public void playLocalTrack(SlashCommandInteractionEvent event, String trackURL) {
+        final GuildMusicManager musicManager = this.getMusicManager(event.getGuild());
+        this.audioPlayerManager.loadItem(trackURL, new AudioLoadResultHandler() {
+            @Override
+            public void trackLoaded(AudioTrack audioTrack) {
+                musicManager.scheduler.queue(audioTrack);
+            }
+
+            @Override
+            public void playlistLoaded(AudioPlaylist audioPlaylist) {
+            }
+
+            @Override
+            public void noMatches() {
+                if (event != null) {
+                    event.getChannel().asTextChannel().sendMessage("No matches found").queue();
+                }
+            }
+
+            @Override
+            public void loadFailed(FriendlyException e) {
+                if (event != null) {
+                    event.getChannel().asTextChannel().sendMessage("Failed to play a track").queue();
+                }
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void playPlaylist(SlashCommandInteractionEvent event, String trackURL) {
         final GuildMusicManager musicManager = this.getMusicManager(event.getGuild());
 
         this.audioPlayerManager.loadItemOrdered(musicManager, trackURL, new AudioLoadResultHandler() {
@@ -134,6 +134,43 @@ public class PlayerManager {
             @Override
             public void loadFailed(FriendlyException e) {
                 event.getChannel().asTextChannel().sendMessage("Failed to load a playlist").queue();
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void search(SlashCommandInteractionEvent event, String trackURL) {
+        final GuildMusicManager musicManager = this.getMusicManager(event.getGuild());
+        this.audioPlayerManager.loadItemOrdered(musicManager, trackURL, new AudioLoadResultHandler() {
+            @Override
+            public void trackLoaded(AudioTrack audioTrack) {
+            }
+
+            @Override
+            public void playlistLoaded(AudioPlaylist audioPlaylist) {
+                final List<AudioTrack> tracks = audioPlaylist.getTracks();
+                if (!tracks.isEmpty()) {
+                    StringBuilder message = new StringBuilder();
+                    TrackScheduler scheduler = musicManager.scheduler;
+                    scheduler.tracksFromSearch.clear();
+                    for (int i = 0; i < 5; i++) {
+                        message.append("**").append(i+1).append(".** ");
+                        message.append(Utils.formatTrackInfo(tracks.get(i)));
+                        message.append("\n");
+                        scheduler.tracksFromSearch.add(tracks.get(i));
+                    }
+                    event.getChannel().asTextChannel().sendMessage(message.toString()).queue();
+                }
+            }
+
+            @Override
+            public void noMatches() {
+                event.getChannel().asTextChannel().sendMessage("No matches found").queue();
+            }
+
+            @Override
+            public void loadFailed(FriendlyException e) {
+                event.getChannel().asTextChannel().sendMessage("Failed to search for songs").queue();
                 e.printStackTrace();
             }
         });

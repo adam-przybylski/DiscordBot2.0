@@ -7,6 +7,8 @@ import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
 
@@ -16,10 +18,12 @@ public class TrackScheduler extends AudioEventAdapter {
     public final BlockingQueue<AudioTrack> queue;
     public boolean loop = false;
     private AudioTrack lastTrack;
+    public List<AudioTrack> tracksFromSearch;
 
     public TrackScheduler(AudioPlayer audioPlayer) {
         this.audioPlayer = audioPlayer;
         this.queue = new LinkedBlockingQueue<>();
+        tracksFromSearch = new ArrayList<>();
     }
 
     public void queue(AudioTrack track) {
@@ -36,6 +40,11 @@ public class TrackScheduler extends AudioEventAdapter {
         if (lastTrack == null) return null;
         this.audioPlayer.startTrack(lastTrack.makeClone(), false);
         return Utils.formatTrackInfo(lastTrack);
+    }
+
+    public void playFromSearchList(int index) {
+        if (tracksFromSearch.size() < 5) return;
+        queue(tracksFromSearch.get(index));
     }
 
     @Override

@@ -28,7 +28,9 @@ public class CommandManager extends ListenerAdapter {
             new PlaylistCommand(),
             new LoopCommand(),
             new ReplayCommand(),
-            new LocalTrackCommand()
+            new LocalTrackCommand(),
+            new YtSearchCommand(),
+            new ScSearchCommand()
     );
 
     @Override

@@ -25,7 +25,7 @@ public class EventListener extends ListenerAdapter {
     public void onGuildVoiceUpdate(GuildVoiceUpdateEvent event) {
         Member member = event.getMember();
         HashMap<String, String> map = (HashMap<String, String>) Config.getInstance().getConfig().get("reactions_to_user_join_vc");
-        if (map.containsKey(member.getId()) && member.getVoiceState().inAudioChannel() && event.getChannelLeft() == null) {
+        if (map.containsKey(member.getId()) && member.getVoiceState().inAudioChannel() && event.getChannelLeft() == null && event.getGuild().getAudioManager().isConnected()) {
             PlayerManager.getInstance().playLocalTrack(event.getGuild(), "tracks/" + map.get(member.getId()) + ".mp3");
         }
     }

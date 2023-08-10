@@ -3,8 +3,6 @@ package com.bot.commands.music;
 import com.bot.commands.Command;
 import com.bot.lavaplayer.PlayerManager;
 import com.bot.utils.Utils;
-import com.sedmelluq.discord.lavaplayer.source.local.LocalAudioTrack;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -22,7 +20,7 @@ public class PlaylistCommand implements Command {
         if (!Utils.isUrl(link)) {
             event.getHook().sendMessage("Invalid playlist link").queue();
         }
-        PlayerManager.getInstance().loadAndPlayPlaylist(event, link);
+        PlayerManager.getInstance().playPlaylist(event, link);
         event.getHook().sendMessage("Adding to queue:").queue();
     }
 

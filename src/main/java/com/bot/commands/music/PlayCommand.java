@@ -23,7 +23,7 @@ public class PlayCommand implements Command {
             link = "ytsearch: " + link + " audio";
         }
         //System.out.println(link);
-        PlayerManager.getInstance().loadAndPlay(event, link);
+        PlayerManager.getInstance().play(event, link);
         event.getHook().sendMessage("Adding to queue:").queue();
     }
 
