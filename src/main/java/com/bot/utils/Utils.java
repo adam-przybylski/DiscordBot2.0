@@ -1,5 +1,6 @@
 package com.bot.utils;
 
+import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.entities.channel.concrete.VoiceChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.managers.AudioManager;
@@ -30,5 +31,13 @@ public class Utils {
         } catch (URISyntaxException e) {
             return false;
         }
+    }
+
+    public static String formatTrackInfo(AudioTrack track) {
+        return "**"
+                .concat(track.getInfo().title)
+                .concat("** by **")
+                .concat(track.getInfo().author)
+                .concat("**");
     }
 }

@@ -1,5 +1,6 @@
 package com.bot.lavaplayer;
 
+import com.bot.utils.Utils;
 import com.sedmelluq.discord.lavaplayer.player.AudioLoadResultHandler;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.DefaultAudioPlayerManager;
@@ -7,6 +8,7 @@ import com.sedmelluq.discord.lavaplayer.source.AudioSourceManagers;
 import com.sedmelluq.discord.lavaplayer.tools.FriendlyException;
 import com.sedmelluq.discord.lavaplayer.track.AudioPlaylist;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
+import com.sedmelluq.discord.lavaplayer.track.AudioTrackEndReason;
 import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.apache.commons.collections4.map.HashedMap;
@@ -41,33 +43,16 @@ public class PlayerManager {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
                 musicManager.scheduler.queue(audioTrack);
-                String message = "**"
-                        .concat(audioTrack.getInfo().title)
-                        .concat("** by **")
-                        .concat(audioTrack.getInfo().author)
-                        .concat("** **(")
-                        .concat(String.valueOf(audioTrack.getInfo().length / 1000 / 60))
-                        .concat(":")
-                        .concat(String.valueOf(audioTrack.getInfo().length / 1000 % 60))
-                        .concat(")**");
+                String message = Utils.formatTrackInfo(audioTrack);
                 event.getChannel().asTextChannel().sendMessage(message).queue();
             }
 
             @Override
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
-
                 if (!tracks.isEmpty()) {
                     musicManager.scheduler.queue(tracks.get(0));
-                    String message = "**"
-                            .concat(tracks.get(0).getInfo().title)
-                            .concat("** by **")
-                            .concat(tracks.get(0).getInfo().author)
-                            .concat("** **(")
-                            .concat(String.valueOf(tracks.get(0).getInfo().length / 1000 / 60))
-                            .concat(":")
-                            .concat(String.valueOf(tracks.get(0).getInfo().length / 1000 % 60))
-                            .concat(")**");
+                    String message = Utils.formatTrackInfo(tracks.get(0));
                     event.getChannel().asTextChannel().sendMessage(message).queue();
                 }
             }
@@ -85,9 +70,49 @@ public class PlayerManager {
         });
     }
 
+    public void loadAndPlayPlaylist(SlashCommandInteractionEvent event, String trackURL) {
+        final GuildMusicManager musicManager = this.getMusicManager(event.getGuild());
+
+        this.audioPlayerManager.loadItemOrdered(musicManager, trackURL, new AudioLoadResultHandler() {
+            @Override
+            public void trackLoaded(AudioTrack audioTrack) {
+                musicManager.scheduler.queue(audioTrack);
+                String message = Utils.formatTrackInfo(audioTrack);
+                event.getChannel().asTextChannel().sendMessage(message).queue();
+            }
+
+            @Override
+            public void playlistLoaded(AudioPlaylist audioPlaylist) {
+                final List<AudioTrack> tracks = audioPlaylist.getTracks();
+                if (!tracks.isEmpty()) {
+                    StringBuilder message = new StringBuilder();
+                    int i = 1;
+                    for (AudioTrack track : tracks) {
+                        musicManager.scheduler.queue(track);
+                        message.append("**").append(i++).append(".** ");
+                        message.append(Utils.formatTrackInfo(track));
+                        message.append("\n");
+                    }
+                    event.getChannel().asTextChannel().sendMessage(message.toString()).queue();
+                }
+            }
+
+            @Override
+            public void noMatches() {
+                event.getChannel().asTextChannel().sendMessage("No matches found").queue();
+            }
+
+            @Override
+            public void loadFailed(FriendlyException e) {
+                event.getChannel().asTextChannel().sendMessage("Failed to load a playlist").queue();
+                e.printStackTrace();
+            }
+        });
+    }
+
     public void skipTrack(Guild guild) {
         final GuildMusicManager musicManager = this.getMusicManager(guild);
-        musicManager.scheduler.nextTrack();
+        musicManager.scheduler.onTrackEnd(musicManager.audioPlayer, musicManager.audioPlayer.getPlayingTrack(), AudioTrackEndReason.FINISHED);
     }
 
     public void skipAllTracks(Guild guild) {

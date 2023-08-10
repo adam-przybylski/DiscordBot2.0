@@ -1,5 +1,6 @@
-package com.bot.commands;
+package com.bot.commands.music;
 
+import com.bot.commands.Command;
 import com.bot.lavaplayer.PlayerManager;
 import com.sedmelluq.discord.lavaplayer.player.AudioPlayer;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
@@ -9,7 +10,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.util.List;
 
-public class ResumeCommand implements Command{
+public class PauseCommand implements Command {
     @Override
     public void handle(SlashCommandInteractionEvent event) {
         event.deferReply().queue();
@@ -22,22 +23,22 @@ public class ResumeCommand implements Command{
             event.getHook().sendMessage("No song is currently playing").queue();
             return;
         }
-        if (!player.isPaused()) {
-            event.getHook().sendMessage("The player is not paused").queue();
+        if (player.isPaused()) {
+            event.getHook().sendMessage("The player is already paused").queue();
             return;
         }
-        player.setPaused(false);
-        event.getHook().sendMessage("Resumed").queue();
+        player.setPaused(true);
+        event.getHook().sendMessage("Paused").queue();
     }
 
     @Override
     public String getDescription() {
-        return "Resume the current song";
+        return "Pause the current song";
     }
 
     @Override
     public String getName() {
-        return "resume";
+        return "pause";
     }
 
     @Override

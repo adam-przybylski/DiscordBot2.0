@@ -1,5 +1,6 @@
-package com.bot.commands;
+package com.bot.commands.music;
 
+import com.bot.commands.Command;
 import com.bot.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;

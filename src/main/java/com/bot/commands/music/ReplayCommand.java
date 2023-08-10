@@ -1,7 +1,7 @@
-package com.bot.commands;
+package com.bot.commands.music;
 
+import com.bot.commands.Command;
 import com.bot.lavaplayer.PlayerManager;
-import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -9,30 +9,26 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.util.List;
 
-public class NowPlayingCommand implements Command {
+public class ReplayCommand implements Command {
     @Override
     public void handle(SlashCommandInteractionEvent event) {
         event.deferReply().queue();
-        AudioTrack currentTrack = PlayerManager.getInstance().getMusicManager(event.getGuild()).audioPlayer.getPlayingTrack();
-        if (currentTrack == null) {
-            event.getHook().sendMessage("No song is currently playing").queue();
-            return;
+        String result = PlayerManager.getInstance().getMusicManager(event.getGuild()).scheduler.repeatTrack();
+        if (result == null) {
+            event.getHook().sendMessage("No song to replay").queue();
+        } else {
+            event.getHook().sendMessage("Replaying" + result).queue();
         }
-        String message = "**"
-                .concat(currentTrack.getInfo().title)
-                .concat("** by **")
-                .concat(currentTrack.getInfo().author);
-        event.getHook().sendMessage("Currently playing: " + message).queue();
     }
 
     @Override
     public String getDescription() {
-        return "Name of the currently playing song";
+        return "Replay the last song";
     }
 
     @Override
     public String getName() {
-        return "now_playing";
+        return "replay";
     }
 
     @Override

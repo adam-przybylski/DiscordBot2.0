@@ -1,5 +1,6 @@
 package com.bot.commands;
 
+import com.bot.commands.music.*;
 import net.dv8tion.jda.api.events.guild.GenericGuildEvent;
 import net.dv8tion.jda.api.events.guild.GuildJoinEvent;
 import net.dv8tion.jda.api.events.guild.GuildReadyEvent;
@@ -15,7 +16,6 @@ public class CommandManager extends ListenerAdapter {
 
     List<Command> commands = List.of(
             new SayCommand(),
-            new TestCommand(),
             new PlayCommand(),
             new SkipCommand(),
             new SkipAllCommand(),
@@ -24,7 +24,10 @@ public class CommandManager extends ListenerAdapter {
             new ShowQueueCommand(),
             new NowPlayingCommand(),
             new PauseCommand(),
-            new ResumeCommand()
+            new ResumeCommand(),
+            new PlaylistCommand(),
+            new LoopCommand(),
+            new ReplayCommand()
     );
 
     @Override

@@ -1,5 +1,7 @@
-package com.bot.commands;
+package com.bot.commands.music;
 
+import com.bot.commands.Command;
+import com.bot.lavaplayer.PlayerManager;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
@@ -7,20 +9,22 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.util.List;
 
-public class TestCommand implements Command {
+public class SkipCommand implements Command {
     @Override
     public void handle(SlashCommandInteractionEvent event) {
-        event.reply("You just used test command").queue();
+        event.deferReply().queue();
+        PlayerManager.getInstance().skipTrack(event.getGuild());
+        event.getHook().sendMessage("Skipped").queue();
     }
 
     @Override
     public String getDescription() {
-        return "Test command";
+        return "Skip a song";
     }
 
     @Override
     public String getName() {
-        return "test";
+        return "skip";
     }
 
     @Override
