@@ -8,8 +8,6 @@ import net.dv8tion.jda.api.interactions.commands.build.CommandData;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
-import java.net.URI;
-import java.net.URISyntaxException;
 import java.util.List;
 
 public class PlayCommand implements Command {

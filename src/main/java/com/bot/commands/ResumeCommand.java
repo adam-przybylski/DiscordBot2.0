@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.util.List;
 
-public class PauseCommand implements Command {
+public class ResumeCommand implements Command{
     @Override
     public void handle(SlashCommandInteractionEvent event) {
         event.deferReply().queue();
@@ -22,22 +22,22 @@ public class PauseCommand implements Command {
             event.getHook().sendMessage("No song is currently playing").queue();
             return;
         }
-        if (player.isPaused()) {
-            event.getHook().sendMessage("The player is already paused").queue();
+        if (!player.isPaused()) {
+            event.getHook().sendMessage("The player is not paused").queue();
             return;
         }
-        player.setPaused(true);
-        event.getHook().sendMessage("Paused").queue();
+        player.setPaused(false);
+        event.getHook().sendMessage("Resumed").queue();
     }
 
     @Override
     public String getDescription() {
-        return "Pause the current song";
+        return "Resume the current song";
     }
 
     @Override
     public String getName() {
-        return "pause";
+        return "resume";
     }
 
     @Override

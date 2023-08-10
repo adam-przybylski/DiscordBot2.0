@@ -12,6 +12,10 @@ public class JoinCommand implements Command {
     @Override
     public void handle(SlashCommandInteractionEvent event) {
         event.deferReply().queue();
+        if (!event.getMember().getVoiceState().inAudioChannel()) {
+            event.getHook().sendMessage("You must be in a voice channel to use this command").queue();
+            return;
+        }
         Utils.joinVoiceChannel(event);
         event.getHook().sendMessage("Joined").queue();
     }
