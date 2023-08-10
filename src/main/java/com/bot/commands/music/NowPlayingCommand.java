@@ -2,6 +2,7 @@ package com.bot.commands.music;
 
 import com.bot.commands.Command;
 import com.bot.lavaplayer.PlayerManager;
+import com.bot.utils.Utils;
 import com.sedmelluq.discord.lavaplayer.track.AudioTrack;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.CommandData;
@@ -19,11 +20,7 @@ public class NowPlayingCommand implements Command {
             event.getHook().sendMessage("No song is currently playing").queue();
             return;
         }
-        String message = "**"
-                .concat(currentTrack.getInfo().title)
-                .concat("** by **")
-                .concat(currentTrack.getInfo().author);
-        event.getHook().sendMessage("Currently playing: " + message).queue();
+        event.getHook().sendMessage("Currently playing: " + Utils.formatTrackInfo(currentTrack)).queue();
     }
 
     @Override
