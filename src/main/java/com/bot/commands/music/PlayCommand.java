@@ -16,13 +16,10 @@ public class PlayCommand implements Command {
     public void handle(SlashCommandInteractionEvent event) {
         event.deferReply().queue();
         Utils.joinVoiceChannel(event);
-
         String link = event.getOption("url").getAsString();
-        //System.out.println(link);
         if (!Utils.isUrl(link)) {
             link = "ytsearch: " + link + " audio";
         }
-        //System.out.println(link);
         PlayerManager.getInstance().play(event, link);
         event.getHook().sendMessage("Adding to queue:").queue();
     }

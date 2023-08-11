@@ -15,7 +15,7 @@ import java.util.concurrent.LinkedBlockingQueue;
 public class TrackScheduler extends AudioEventAdapter {
 
     public final AudioPlayer audioPlayer;
-    public final BlockingQueue<AudioTrack> queue;
+    public BlockingQueue<AudioTrack> queue;
     public boolean loop = false;
     private AudioTrack lastTrack;
     public List<AudioTrack> tracksFromSearch;

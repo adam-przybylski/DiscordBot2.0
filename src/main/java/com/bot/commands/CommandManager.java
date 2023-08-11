@@ -30,7 +30,9 @@ public class CommandManager extends ListenerAdapter {
             new ReplayCommand(),
             new LocalTrackCommand(),
             new YtSearchCommand(),
-            new ScSearchCommand()
+            new ScSearchCommand(),
+            new LoadConfigCommand(),
+            new DeleteFromQueueCommand()
     );
 
     @Override

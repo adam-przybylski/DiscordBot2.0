@@ -154,7 +154,7 @@ public class PlayerManager {
                     TrackScheduler scheduler = musicManager.scheduler;
                     scheduler.tracksFromSearch.clear();
                     for (int i = 0; i < 5; i++) {
-                        message.append("**").append(i+1).append(".** ");
+                        message.append("**").append(i + 1).append(".** ");
                         message.append(Utils.formatTrackInfo(tracks.get(i)));
                         message.append("\n");
                         scheduler.tracksFromSearch.add(tracks.get(i));
