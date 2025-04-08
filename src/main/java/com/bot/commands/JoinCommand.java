@@ -7,12 +7,13 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.dv8tion.jda.api.interactions.commands.build.OptionData;
 
 import java.util.List;
+import java.util.Objects;
 
 public class JoinCommand implements Command {
     @Override
     public void handle(SlashCommandInteractionEvent event) {
         event.deferReply().queue();
-        if (!event.getMember().getVoiceState().inAudioChannel()) {
+        if (!Objects.requireNonNull(Objects.requireNonNull(event.getMember()).getVoiceState()).inAudioChannel()) {
             event.getHook().sendMessage("You must be in a voice channel to use this command").queue();
             return;
         }

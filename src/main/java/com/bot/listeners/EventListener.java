@@ -15,8 +15,11 @@ public class EventListener extends ListenerAdapter {
         if (!event.getAuthor().isBot()) {
             String message = event.getMessage().getContentRaw().toLowerCase().replaceAll("\\s", "");
             HashMap<String, String> answers = (HashMap<String, String>) Config.getInstance().getConfig().get("answers");
-            if (answers.containsKey(message)) {
-                event.getChannel().sendMessage(answers.get(message)).queue();
+            for (String key : answers.keySet()) {
+                if (message.contains(key)) {
+                    event.getChannel().sendMessage(answers.get(key)).queue();
+                    break;
+                }
             }
         }
     }

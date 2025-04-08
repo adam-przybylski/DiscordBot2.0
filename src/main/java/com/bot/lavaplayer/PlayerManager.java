@@ -15,6 +15,7 @@ import org.apache.commons.collections4.map.HashedMap;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class PlayerManager {
     private static PlayerManager INSTANCE;
@@ -37,7 +38,7 @@ public class PlayerManager {
     }
 
     public void play(SlashCommandInteractionEvent event, String trackURL) {
-        final GuildMusicManager musicManager = this.getMusicManager(event.getGuild());
+        final GuildMusicManager musicManager = this.getMusicManager(Objects.requireNonNull(event.getGuild()));
 
         this.audioPlayerManager.loadItemOrdered(musicManager, trackURL, new AudioLoadResultHandler() {
             @Override
@@ -51,8 +52,8 @@ public class PlayerManager {
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
                 if (!tracks.isEmpty()) {
-                    musicManager.scheduler.queue(tracks.get(0));
-                    String message = Utils.formatTrackInfo(tracks.get(0));
+                    musicManager.scheduler.queue(tracks.getFirst());
+                    String message = Utils.formatTrackInfo(tracks.getFirst());
                     event.getChannel().asTextChannel().sendMessage(message).queue();
                 }
             }
@@ -71,7 +72,7 @@ public class PlayerManager {
     }
 
     public void playLocalTrack(SlashCommandInteractionEvent event, String trackURL) {
-        final GuildMusicManager musicManager = this.getMusicManager(event.getGuild());
+        final GuildMusicManager musicManager = this.getMusicManager(Objects.requireNonNull(event.getGuild()));
         this.audioPlayerManager.loadItem(trackURL, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
@@ -84,23 +85,19 @@ public class PlayerManager {
 
             @Override
             public void noMatches() {
-                if (event != null) {
-                    event.getChannel().asTextChannel().sendMessage("No matches found").queue();
-                }
+                event.getChannel().asTextChannel().sendMessage("No matches found").queue();
             }
 
             @Override
             public void loadFailed(FriendlyException e) {
-                if (event != null) {
-                    event.getChannel().asTextChannel().sendMessage("Failed to play a track").queue();
-                }
+                event.getChannel().asTextChannel().sendMessage("Failed to play a track").queue();
                 e.printStackTrace();
             }
         });
     }
 
     public void playPlaylist(SlashCommandInteractionEvent event, String trackURL) {
-        final GuildMusicManager musicManager = this.getMusicManager(event.getGuild());
+        final GuildMusicManager musicManager = this.getMusicManager(Objects.requireNonNull(event.getGuild()));
 
         this.audioPlayerManager.loadItemOrdered(musicManager, trackURL, new AudioLoadResultHandler() {
             @Override
@@ -140,7 +137,7 @@ public class PlayerManager {
     }
 
     public void search(SlashCommandInteractionEvent event, String trackURL) {
-        final GuildMusicManager musicManager = this.getMusicManager(event.getGuild());
+        final GuildMusicManager musicManager = this.getMusicManager(Objects.requireNonNull(event.getGuild()));
         this.audioPlayerManager.loadItemOrdered(musicManager, trackURL, new AudioLoadResultHandler() {
             @Override
             public void trackLoaded(AudioTrack audioTrack) {
