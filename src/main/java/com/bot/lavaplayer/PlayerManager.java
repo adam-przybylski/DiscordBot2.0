@@ -14,6 +14,7 @@ import net.dv8tion.jda.api.entities.Guild;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import org.apache.commons.collections4.map.HashedMap;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -114,15 +115,18 @@ public class PlayerManager {
             public void playlistLoaded(AudioPlaylist audioPlaylist) {
                 final List<AudioTrack> tracks = audioPlaylist.getTracks();
                 if (!tracks.isEmpty()) {
-                    StringBuilder message = new StringBuilder();
+                    StringBuilder messageBuilder = new StringBuilder();
                     int i = 1;
                     for (AudioTrack track : tracks) {
                         musicManager.scheduler.queue(track);
-                        message.append("**").append(i++).append(".** ");
-                        message.append(Utils.formatTrackInfo(track));
-                        message.append("\n");
+                        if(i <= 20) {
+                            messageBuilder.append("**").append(i++).append(".** ");
+                            messageBuilder.append(Utils.formatTrackInfo(track));
+                            messageBuilder.append("\n");
+                        }
                     }
-                    event.getChannel().asTextChannel().sendMessage(message.toString()).queue();
+                    messageBuilder.append("and ").append(tracks.size() - 20).append(" more");
+                    event.getChannel().asTextChannel().sendMessage(messageBuilder.toString()).queue();
                 }
             }
 

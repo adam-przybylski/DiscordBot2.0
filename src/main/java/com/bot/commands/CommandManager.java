@@ -32,7 +32,8 @@ public class CommandManager extends ListenerAdapter {
             new YtSearchCommand(),
             new ScSearchCommand(),
             new LoadConfigCommand(),
-            new DeleteFromQueueCommand()
+            new DeleteFromQueueCommand(),
+            new ShuffleQueueCommand()
     );
 
     @Override
